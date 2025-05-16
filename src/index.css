@@ -1,0 +1,512 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply antialiased;
+  }
+}
+
+/* Custom gradient animation */
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.looker-studio-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 700px;
+}
+
+.looker-studio-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+@media (max-width: 768px) {
+  .looker-studio-container {
+    min-height: 500px;
+  }
+}
+
+/* Add these styles for the PDF container and full screen button */
+.pdf-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  min-height: 700px;
+  transition: all 0.3s ease;
+}
+
+.pdf-container:hover .pdf-fullscreen-btn {
+  opacity: 1;
+}
+
+.pdf-fullscreen-btn {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+}
+
+.pdf-container.fullscreen {
+  background: white;
+  padding: 20px;
+}
+
+.pdf-container object {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+}
+
+/* Adjust the PDF container height in full screen mode */
+:fullscreen .pdf-container {
+  height: 100vh !important;
+  padding: 20px;
+}
+
+:-webkit-full-screen .pdf-container {
+  height: 100vh !important;
+  padding: 20px;
+}
+
+:-moz-full-screen .pdf-container {
+  height: 100vh !important;
+  padding: 20px;
+}
+
+:-ms-fullscreen .pdf-container {
+  height: 100vh !important;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .pdf-container {
+    min-height: 500px;
+  }
+}
+
+@keyframes fade-in-out {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-fade-in-out {
+  animation: fade-in-out 2s ease-in-out;
+}
+
+.animate-pulse {
+  animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Neural network background pattern - light version */
+.bg-neural-network-light {
+  background-image: 
+    radial-gradient(#ffffff 1px, transparent 1px),
+    radial-gradient(#ffffff 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+  transform: rotate(5deg) scale(1.5);
+  opacity: 0.2;
+}
+
+@keyframes blob {
+  0% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(30px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+}
+
+.animate-blob {
+  animation: blob 7s infinite;
+}
+
+.animation-delay-2000 {
+  animation-delay: 2s;
+}
+
+.animation-delay-4000 {
+  animation-delay: 4s;
+}
+
+@keyframes fade-in-out {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.animate-fade-in-out {
+  animation: fade-in-out 2s ease-in-out;
+}
+
+/* Enhance glassmorphism effects */
+.backdrop-filter {
+  backdrop-filter: blur(8px);
+}
+
+/* Animated gradient */
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.bg-animated-gradient {
+  background-size: 200% 200%;
+  animation: gradient 15s ease infinite;
+}
+
+/* Grid pattern background */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+}
+
+/* Noise texture overlay */
+.bg-noise-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* 3D card effect */
+.perspective {
+  perspective: 2000px;
+}
+
+.card-3d {
+  transition: transform 0.3s ease;
+}
+
+.card-3d:hover {
+  transform: translateY(-5px) rotateX(2deg);
+}
+
+/* Slow ping animation for brain icon - optimized */
+@keyframes ping-slow {
+  75%, 100% {
+    transform: scale(1.2);
+    opacity: 0;
+  }
+}
+
+.animate-ping-slow {
+  animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Fade in animation - simplified */
+@keyframes fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fade-in 0.5s ease-out forwards;
+}
+
+/* Tell the browser to optimize these properties */
+.will-change-transform {
+  will-change: transform;
+}
+
+/* Custom slider styling */
+input[type=range] {
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 5px;
+  background-image: linear-gradient(to right, #4076bb, #78D1E1);
+  background-size: 70% 100%;
+  background-repeat: no-repeat;
+}
+
+/* Animated glow for brain icon - simplified */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(120, 209, 225, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(64, 118, 187, 0.7);
+  }
+}
+
+.animate-glow {
+  animation: glow 4s ease-in-out infinite;
+}
+
+/* Apply optimized smooth scrolling only where needed */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* Premium mesh gradient background - optimized for performance */
+.bg-premium-gradient {
+  background: linear-gradient(125deg, #4076bb, #78D1E1);
+  background-size: 100% 100%;
+}
+
+/* Mesh pattern for sophisticated texture - simplified */
+.bg-mesh-pattern {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+/* Noise texture for depth */
+.bg-gradient-noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-15px) translateX(15px);
+  }
+  50% {
+    transform: translateY(10px) translateX(-10px);
+  }
+  75% {
+    transform: translateY(-5px) translateX(5px);
+  }
+}
+
+.animate-float {
+  animation: float 15s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 18s ease-in-out infinite reverse;
+}
+
+/* Particles animation */
+.particles {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@keyframes particle-animation {
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-100vh) translateX(100px);
+  }
+}
+
+.particle-1 {
+  width: 3px;
+  height: 3px;
+  background: white;
+  animation: particle-animation 20s linear infinite;
+  left: 10%;
+  top: 90%;
+}
+
+.particle-2 {
+  width: 5px;
+  height: 5px;
+  background: #78D1E1;
+  animation: particle-animation 25s linear infinite;
+  animation-delay: 2s;
+  left: 20%;
+  top: 80%;
+}
+
+.particle-3 {
+  width: 2px;
+  height: 2px;
+  background: white;
+  animation: particle-animation 18s linear infinite;
+  animation-delay: 5s;
+  left: 50%;
+  top: 70%;
+}
+
+.particle-4 {
+  width: 4px;
+  height: 4px;
+  background: #4076bb;
+  animation: particle-animation 22s linear infinite;
+  animation-delay: 8s;
+  left: 70%;
+  top: 90%;
+}
+
+.particle-5 {
+  width: 3px;
+  height: 3px;
+  background: white;
+  animation: particle-animation 15s linear infinite;
+  animation-delay: 12s;
+  left: 90%;
+  top: 80%;
+}
+
+/* Professional gradient background */
+.bg-professional-gradient {
+  background: linear-gradient(135deg, #2c5282, #3182ce, #4299e1);
+  background-size: 100% 100%;
+}
+
+/* Professional pattern for background */
+.bg-professional-pattern {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Subtle pulse animation for logo */
+@keyframes subtle-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.2);
+  }
+}
+
+.animate-subtle-pulse {
+  animation: subtle-pulse 4s ease-in-out infinite;
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
+
+/* Custom slider styling */
+.slider-input {
+  -webkit-appearance: none;
+  height: 6px;
+  background: #e5e7eb;
+  border-radius: 5px;
+  outline: none;
+}
+
+.slider-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4076bb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.slider-input::-webkit-slider-thumb:hover {
+  background: #3865a7;
+  transform: scale(1.1);
+}
+
+.slider-input::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4076bb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.slider-input::-moz-range-thumb:hover {
+  background: #3865a7;
+  transform: scale(1.1);
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input, textarea {
+  transition: all 0.2s ease;
+}
+
+/* Fix for the word count range labels */
+.flex.justify-between {
+  margin-bottom: 0;
+}
+
+/* Smooth hover effects for cards */
+.bg-white {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bg-white:hover {
+  transform: translateY(-2px);
+}
