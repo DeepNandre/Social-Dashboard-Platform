@@ -37,4 +37,3 @@ A modern analytics dashboard for social media metrics and business insights.
 - Customizable dashboards
 - User authentication and authorization
 - Responsive design
-
