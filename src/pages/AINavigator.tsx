@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ClipboardCopy, RefreshCw, Linkedin, Zap, Brain, Sparkles, Copy, ArrowRight, Save, PenLine, BarChart, Users, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import debounce from 'lodash/debounce';
+import { motion } from 'framer-motion';
 
 interface ContentGeneratorProps {
   prompt: string;
@@ -44,7 +45,7 @@ export function AINavigator() {
 
   const saveNotepad = () => {
     try {
-      localStorage.setItem('content-notepad', notepadContent);
+      localStorage.setItem('socialsleuth-content-notepad', notepadContent);
       setNoteSaved(true);
       setTimeout(() => setNoteSaved(false), 2000);
     } catch (err) {
@@ -54,7 +55,7 @@ export function AINavigator() {
 
   useEffect(() => {
     try {
-      const savedNotes = localStorage.getItem('content-notepad');
+      const savedNotes = localStorage.getItem('socialsleuth-content-notepad');
       if (savedNotes) {
         setNotepadContent(savedNotes);
       }
@@ -64,15 +65,15 @@ export function AINavigator() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-700">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-teal-400">
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <div className="flex items-center">
               <Link to="/" className="flex-shrink-0 flex items-center">
                 <img 
-                  src="/analytics-logo.png" 
-                  alt="Analytics Logo"
+                  src="/logo.png" 
+                  alt="Social Sleuth Logo"
                   className="h-8 w-auto"
                   onError={(e) => {
                     (e.target as HTMLImageElement).style.display = 'none';
@@ -91,209 +92,120 @@ export function AINavigator() {
         </div>
       </div>
       
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-10">
         {/* AI badge */}
-        <div className="flex justify-center mb-6">
+        <motion.div 
+          className="flex justify-center mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full">
             <Sparkles className="w-4 h-4 text-white" />
             <p className="text-white text-sm">Powered by Advanced AI</p>
           </div>
-        </div>
+        </motion.div>
         
         {/* Main content area */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {/* Content Generator */}
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <div className="p-4 flex items-center justify-between border-b border-gray-100">
-              <div className="flex items-center">
-                <Brain className="w-4 h-4 text-blue-600 mr-2" />
-                <h2 className="text-base font-medium text-gray-800">AI Content Generator</h2>
-              </div>
-              <button className="text-gray-400 hover:text-gray-500">
-                <RefreshCw className="w-4 h-4" />
-              </button>
+          <motion.div 
+            className="bg-white rounded-2xl shadow-lg overflow-hidden p-6 flex flex-col"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="flex items-center mb-4">
+              <Brain className="w-6 h-6 text-blue-600 mr-2" />
+              <h2 className="text-lg font-semibold text-gray-800">AI Content Generator</h2>
             </div>
-            
-            <div className="p-4 space-y-4">
-              {/* Platform Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Select Platform
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {['linkedin', 'twitter', 'facebook'].map((platform) => (
-                    <button
-                      key={platform}
-                      onClick={() => setSelectedPlatform(platform)}
-                      className={`px-3 py-2 rounded-md text-sm font-medium ${
-                        selectedPlatform === platform
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {platform.charAt(0).toUpperCase() + platform.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Content Type */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Content Type
-                </label>
-                <select
-                  value={contentType}
-                  onChange={(e) => setContentType(e.target.value)}
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                >
-                  <option value="post">Post</option>
-                  <option value="article">Article</option>
-                  <option value="thread">Thread</option>
-                  <option value="newsletter">Newsletter</option>
-                </select>
-              </div>
-
-              {/* Tone Selection */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Tone
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {['professional', 'casual', 'friendly'].map((t) => (
-                    <button
-                      key={t}
-                      onClick={() => setTone(t)}
-                      className={`px-3 py-2 rounded-md text-sm font-medium ${
-                        tone === t
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {t.charAt(0).toUpperCase() + t.slice(1)}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Word Count Slider */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Word Count: {wordCount}
-                </label>
-                <input
-                  type="range"
-                  min="100"
-                  max="1000"
-                  value={wordCount}
-                  onChange={(e) => setWordCount(parseInt(e.target.value))}
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                />
-              </div>
-
-              {/* Prompt Input */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  What would you like to write about?
-                </label>
-                <textarea
-                  value={prompt}
-                  onChange={handlePromptChange}
-                  placeholder="Enter your topic or idea..."
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                  rows={4}
-                />
-                <p className="mt-1 text-sm text-gray-500">
-                  {charCount} characters
-                </p>
-              </div>
-
-              {/* Generate Button */}
+            <textarea
+              className="w-full border border-gray-200 rounded-lg p-3 mb-4 focus:ring-blue-500 focus:border-blue-500"
+              rows={4}
+              placeholder="Enter your prompt or topic..."
+              value={prompt}
+              onChange={handlePromptChange}
+            />
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs text-gray-500">{charCount} characters</span>
               <button
-                onClick={() => {/* Add generation logic */}}
-                disabled={isGenerating || !prompt}
-                className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                onClick={() => setIsGenerating(true)}
+                disabled={isGenerating}
               >
                 {isGenerating ? 'Generating...' : 'Generate Content'}
               </button>
             </div>
-          </div>
-
-          {/* Notepad */}
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <div className="p-4 flex items-center justify-between border-b border-gray-100">
-              <div className="flex items-center">
-                <PenLine className="w-4 h-4 text-blue-600 mr-2" />
-                <h2 className="text-base font-medium text-gray-800">Content Notepad</h2>
+            {generatedContent && (
+              <div className="bg-gray-50 rounded-lg p-4 mb-4">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-medium text-gray-700">Generated Content</span>
+                  <button
+                    className="text-blue-500 hover:text-blue-700"
+                    onClick={copyToNotepad}
+                  >
+                    <ClipboardCopy className="w-4 h-4 inline-block mr-1" /> Copy to Notepad
+                  </button>
+                </div>
+                <p className="text-gray-700 whitespace-pre-line">{generatedContent}</p>
               </div>
-              <div className="flex items-center space-x-2">
-                <button
-                  onClick={copyToNotepad}
-                  className="text-gray-400 hover:text-gray-500"
-                  title="Copy to Notepad"
-                >
-                  <ClipboardCopy className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={saveNotepad}
-                  className="text-gray-400 hover:text-gray-500"
-                  title="Save Notepad"
-                >
-                  <Save className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            
-            <div className="p-4">
+            )}
+            <div className="mt-auto">
+              <h3 className="text-sm font-medium text-gray-700 mb-2">Notepad</h3>
               <textarea
+                className="w-full border border-gray-200 rounded-lg p-3 mb-2 focus:ring-blue-500 focus:border-blue-500"
+                rows={3}
+                placeholder="Your notes..."
                 value={notepadContent}
-                onChange={(e) => setNotepadContent(e.target.value)}
-                placeholder="Your content will appear here..."
-                className="w-full h-64 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                onChange={e => setNotepadContent(e.target.value)}
               />
-              {noteSaved && (
-                <p className="mt-2 text-sm text-green-600">Notepad saved!</p>
-              )}
+              <div className="flex items-center justify-between">
+                <button
+                  className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 text-xs"
+                  onClick={saveNotepad}
+                >
+                  <Save className="w-4 h-4 inline-block mr-1" /> Save Note
+                </button>
+                {noteSaved && <span className="text-green-600 text-xs ml-2">Saved!</span>}
+              </div>
             </div>
-          </div>
-        </div>
+          </motion.div>
 
-        {/* AI Insights Section */}
-        <div className="mt-8 max-w-5xl mx-auto">
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <div className="p-4 border-b border-gray-100">
-              <h2 className="text-lg font-medium text-gray-900">AI Insights</h2>
+          {/* AI Insights */}
+          <motion.div 
+            className="bg-white rounded-2xl shadow-lg overflow-hidden p-6 flex flex-col"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.5 }}
+          >
+            <div className="flex items-center mb-4">
+              <Sparkles className="w-6 h-6 text-purple-600 mr-2" />
+              <h2 className="text-lg font-semibold text-gray-800">AI Insights</h2>
             </div>
-            <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-blue-50 rounded-lg">
-                <div className="flex items-center mb-2">
-                  <BarChart className="w-5 h-5 text-blue-600 mr-2" />
+            <div className="grid grid-cols-1 gap-4">
+              <div className="p-4 bg-blue-50 rounded-lg flex items-center">
+                <BarChart className="w-5 h-5 text-blue-600 mr-2" />
+                <div>
                   <h3 className="font-medium text-gray-900">Performance Metrics</h3>
+                  <p className="text-sm text-gray-600">AI-powered analysis of your content performance</p>
                 </div>
-                <p className="text-sm text-gray-600">
-                  AI-powered analysis of your content performance
-                </p>
               </div>
-              <div className="p-4 bg-green-50 rounded-lg">
-                <div className="flex items-center mb-2">
-                  <Users className="w-5 h-5 text-green-600 mr-2" />
+              <div className="p-4 bg-green-50 rounded-lg flex items-center">
+                <Users className="w-5 h-5 text-green-600 mr-2" />
+                <div>
                   <h3 className="font-medium text-gray-900">Audience Insights</h3>
+                  <p className="text-sm text-gray-600">Understand your audience better with AI analysis</p>
                 </div>
-                <p className="text-sm text-gray-600">
-                  Understand your audience better with AI analysis
-                </p>
               </div>
-              <div className="p-4 bg-purple-50 rounded-lg">
-                <div className="flex items-center mb-2">
-                  <Target className="w-5 h-5 text-purple-600 mr-2" />
+              <div className="p-4 bg-purple-50 rounded-lg flex items-center">
+                <Target className="w-5 h-5 text-purple-600 mr-2" />
+                <div>
                   <h3 className="font-medium text-gray-900">Content Strategy</h3>
+                  <p className="text-sm text-gray-600">Get AI recommendations for content optimization</p>
                 </div>
-                <p className="text-sm text-gray-600">
-                  Get AI recommendations for content optimization
-                </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </div>

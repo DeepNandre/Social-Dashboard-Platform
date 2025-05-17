@@ -4,7 +4,8 @@ export const dashboards = {
     title: 'LinkedIn Analytics',
     description: 'Track LinkedIn engagement, followers, and post performance',
     icon: 'Linkedin',
-    embedUrl: 'https://app.powerbi.com/reportEmbed?reportId=f78bbeed-d785-4088-82df-6c5ca5e14c9e&autoAuth=true&ctid=81fe4302-0838-482a-b5d1-2db7126cf178'
+    embedUrl: 'https://app.powerbi.com/reportEmbed?reportId=f78bbeed-d785-4088-82df-6c5ca5e14c9e&autoAuth=true&ctid=81fe4302-0838-482a-b5d1-2db7126cf178',
+    type: 'powerbi'
   },
   'google-analytics': {
     id: 'google-analytics',
@@ -12,7 +13,8 @@ export const dashboards = {
     description: 'Website traffic, user behavior, and conversion metrics',
     icon: 'BarChart',
     lookerStudioUrl: 'https://lookerstudio.google.com/embed/reporting/1c566451-86f9-40e1-9ef1-90b8ffaea128/page/kIV1C',
-    pdfPath: '/Google_Analytics_Website.pdf'
+    pdfPath: '/Google_Analytics_Website.pdf',
+    type: 'google-analytics'
   },
   'custom-reports': {
     id: 'custom-reports',
@@ -56,22 +58,25 @@ export const dashboards = {
     title: 'Content Calendar Analytics',
     embedUrl: 'https://plannable.io/reportEmbed?reportId=planable',
     description: 'Analyze content performance and scheduling efficiency',
-    icon: 'PieChart'
+    icon: 'PieChart',
+    type: 'powerbi'
   },
   odoo: {
     id: 'odoo',
     title: 'Business Analytics',
     embedUrl: 'https://odoo.com/reportEmbed?reportId=odoo',
     description: 'Access business operations and ERP analytics',
-    icon: 'Building'
+    icon: 'Building',
+    type: 'powerbi'
   },
   AINavigator: {
     id: 'AINavigator',
     title: 'AI Content Assistant',
     embedUrl: '',
     description: 'AI-powered social media insights and content suggestions',
-    icon: 'Brain'
+    icon: 'Brain',
+    type: 'powerbi'
   }
 };
 
-export const dashboardsArray = Object.values(dashboards); 
+export const dashboardsArray = Object.values(dashboards);

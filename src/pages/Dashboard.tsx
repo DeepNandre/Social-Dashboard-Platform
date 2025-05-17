@@ -6,6 +6,7 @@ import { ChevronLeft } from 'lucide-react';
 import { GoogleAnalyticsEmbed } from '../components/GoogleAnalyticsEmbed';
 import { CustomReportsTile } from '../components/CustomReportsTile';
 import { dashboards } from '../constants/dashboards';
+import { motion } from 'framer-motion';
 
 export function Dashboard() {
   const { id } = useParams<{ id: string }>();
@@ -28,7 +29,7 @@ export function Dashboard() {
           <p className="text-gray-600 mb-8">The dashboard you're looking for doesn't exist or has been moved.</p>
           <Link 
             to="/" 
-            className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-[#4076bb] hover:bg-[#3567a7] transition-colors"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 transition-colors"
           >
             <ChevronLeft className="mr-2 h-5 w-5" />
             Back to Home
@@ -39,26 +40,53 @@ export function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-teal-50 pt-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto py-8 space-y-8">
         {/* AI Insights Component */}
-        <AIInsights 
-          dashboardId={dashboard.id} 
-          platform={dashboard.id === 'linkedin' ? 'linkedin' : 'website'} 
-        />
-        
-        {/* Conditionally render based on dashboard type */}
-        {dashboard.id === 'google-analytics' ? (
-          <GoogleAnalyticsEmbed 
-            lookerStudioUrl={dashboard.lookerStudioUrl} 
-            pdfPath={dashboard.pdfPath}
-            showRealData={true}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }} 
+          transition={{ duration: 0.5 }}
+          className="bg-white rounded-2xl shadow-lg p-6 mb-8"
+        >
+          <AIInsights 
+            dashboardId={dashboard.id} 
+            platform={dashboard.id === 'linkedin' ? 'linkedin' : 'website'} 
           />
-        ) : dashboard.id === 'custom-reports' ? (
-          <CustomReportsTile reports={(dashboard as any).reports} />
-        ) : (
-          <PowerBIEmbed dashboard={dashboard} />
-        )}
+        </motion.div>
+        {/* Conditionally render based on dashboard type */}
+        {dashboard.id === 'google-analytics' && 'lookerStudioUrl' in dashboard && 'pdfPath' in dashboard ? (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.1, duration: 0.5 }}
+            className="bg-white rounded-2xl shadow-lg p-6"
+          >
+            <GoogleAnalyticsEmbed 
+              lookerStudioUrl={dashboard.lookerStudioUrl} 
+              pdfPath={dashboard.pdfPath}
+              showRealData={true}
+            />
+          </motion.div>
+        ) : dashboard.id === 'custom-reports' && 'reports' in dashboard ? (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.1, duration: 0.5 }}
+            className="bg-white rounded-2xl shadow-lg p-6"
+          >
+            <CustomReportsTile reports={dashboard.reports} />
+          </motion.div>
+        ) : 'embedUrl' in dashboard ? (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.1, duration: 0.5 }}
+            className="bg-white rounded-2xl shadow-lg p-6"
+          >
+            <PowerBIEmbed dashboard={dashboard} />
+          </motion.div>
+        ) : null}
       </div>
     </div>
   );

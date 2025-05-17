@@ -1,16 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { BarChart3, LinkedinIcon, PieChart, ShieldCheck, Building, Brain, ArrowRight, Clock, Star, BarChart2, X } from 'lucide-react';
-import * as Icons from 'lucide-react';
+import { BarChart3, Brain, Zap, LineChart, Star, Clock, ArrowRight } from 'lucide-react';
 import { DashboardTile } from '../components/DashboardTile';
 import { UserContext } from '../context/UserContext';
-import type { DashboardTile as DashboardTileType } from '../types';
-import { DashboardSearch } from '../components/DashboardSearch';
-import { useNavigate } from 'react-router-dom';
 import { dashboardsArray } from '../constants/dashboards';
-import { Link } from 'react-router-dom';
-import { ArrowRight as LinkArrowRight, Star as LinkStar, Clock as LinkClock, BarChart as LinkBarChart, Users, Zap, LineChart } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-// Use dashboards from constants file instead of duplicating
 const dashboards = dashboardsArray;
 
 export function Home() {
@@ -19,15 +14,14 @@ export function Home() {
   const [comparisonMode, setComparisonMode] = useState(false);
   const [selectedForComparison, setSelectedForComparison] = useState<string[]>([]);
   const navigate = useNavigate();
-  
+
   // Get user's favorite dashboards
-  const favoriteDashboards = user?.preferences?.favoriteReports 
-    ? dashboards.filter(dash => user.preferences.favoriteReports.includes(dash.id))
+  const favoriteDashboards = user?.preferences?.favoriteReports
+    ? dashboards.filter(dash => user?.preferences?.favoriteReports?.includes(dash.id))
     : [];
-  
+
   // Get recently viewed dashboards from localStorage
-  const [recentlyViewedDashboards, setRecentlyViewedDashboards] = useState<DashboardTileType[]>([]);
-  
+  const [recentlyViewedDashboards, setRecentlyViewedDashboards] = useState<any[]>([]);
   useEffect(() => {
     const getRecentlyViewed = () => {
       const recentlyViewed = localStorage.getItem('recentlyViewed');
@@ -39,65 +33,54 @@ export function Home() {
       }
       return [];
     };
-    
     setRecentlyViewedDashboards(getRecentlyViewed());
   }, []);
-  
-  const toggleComparisonMode = () => {
-    setComparisonMode(!comparisonMode);
-    setSelectedForComparison([]);
-  };
-  
-  const toggleDashboardSelection = (id: string) => {
-    if (selectedForComparison.includes(id)) {
-      setSelectedForComparison(selectedForComparison.filter(dashId => dashId !== id));
-    } else {
-      // Limit to 2 dashboards for comparison
-      if (selectedForComparison.length < 2) {
-        setSelectedForComparison([...selectedForComparison, id]);
-      }
-    }
-  };
-  
-  const startComparison = () => {
-    if (selectedForComparison.length === 2) {
-      navigate(`/compare?dashboards=${selectedForComparison.join(',')}`);
-    }
-  };
-  
+
+  // --- UI ---
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-blue-600 to-indigo-700 overflow-hidden">
+      <div className="relative bg-gradient-to-br from-blue-600 to-teal-400 overflow-hidden">
         <div className="absolute inset-0 bg-grid-white/[0.05]" />
-        
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
-          <div className="text-center md:text-left md:max-w-2xl">
-            <div className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white/10 text-white/90 backdrop-blur-sm mb-6">
-              <span className="flex h-2 w-2 rounded-full bg-green-400 mr-2"></span>
-              AI-Powered Analytics Platform
-            </div>
-            <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
-              Transform Your Social Media Analytics
-            </h1>
-            <p className="mt-6 text-xl text-white/90 max-w-3xl">
-              Unlock the power of AI-driven insights, real-time analytics, and automated content optimization for your social media success.
-            </p>
-            <div className="mt-10 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <a 
-                href="#dashboards" 
-                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 transition-colors"
-              >
-                Get Started
-                <LinkArrowRight className="ml-2 -mr-1 h-5 w-5" />
-              </a>
-              <a 
-                href="#demo" 
-                className="inline-flex items-center justify-center px-5 py-3 border border-white/30 text-base font-medium rounded-md text-white bg-transparent hover:bg-white/10 transition-colors"
-              >
-                Watch Demo
-              </a>
-            </div>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32 flex flex-col items-center justify-center text-center">
+          <motion.img 
+            src="/logo.png" 
+            alt="Social Sleuth Logo" 
+            className="h-20 w-20 mb-6 drop-shadow-lg" 
+            initial={{ opacity: 0, y: -20 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.6 }}
+          />
+          <motion.h1 
+            className="text-4xl sm:text-6xl font-bold text-white mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            Welcome to <span className="text-blue-200">Social Sleuth</span>
+          </motion.h1>
+          <motion.p 
+            className="text-xl text-white/90 mb-8 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+          >
+            Uncover powerful social media insights, AI-driven analytics, and content optimization—all in one place.
+          </motion.p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a 
+              href="#dashboards" 
+              className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 transition-colors shadow"
+            >
+              Get Started
+              <ArrowRight className="ml-2 -mr-1 h-5 w-5" />
+            </a>
+            <a 
+              href="#demo" 
+              className="inline-flex items-center justify-center px-8 py-3 border border-white/30 text-base font-medium rounded-md text-white bg-transparent hover:bg-white/10 transition-colors shadow"
+            >
+              Watch Demo
+            </a>
           </div>
         </div>
       </div>
@@ -105,7 +88,7 @@ export function Home() {
       {/* Features Section */}
       <div className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+          <div className="text-center mb-16">
             <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
               Everything You Need for Social Media Success
             </h2>
@@ -113,46 +96,22 @@ export function Home() {
               Powerful features to help you grow your social media presence
             </p>
           </div>
-
-          <div className="mt-20 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {/* AI Analytics */}
-            <div className="relative p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="absolute -top-4 left-6">
-                <div className="p-2 bg-blue-100 rounded-lg">
-                  <Brain className="h-6 w-6 text-blue-600" />
-                </div>
-              </div>
-              <h3 className="mt-4 text-lg font-medium text-gray-900">AI-Powered Insights</h3>
-              <p className="mt-2 text-gray-600">
-                Get intelligent recommendations and predictions based on your data
-              </p>
-            </div>
-
-            {/* Real-time Analytics */}
-            <div className="relative p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="absolute -top-4 left-6">
-                <div className="p-2 bg-green-100 rounded-lg">
-                  <LineChart className="h-6 w-6 text-green-600" />
-                </div>
-              </div>
-              <h3 className="mt-4 text-lg font-medium text-gray-900">Real-time Analytics</h3>
-              <p className="mt-2 text-gray-600">
-                Monitor your social media performance in real-time
-              </p>
-            </div>
-
-            {/* Content Optimization */}
-            <div className="relative p-6 bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-              <div className="absolute -top-4 left-6">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Zap className="h-6 w-6 text-purple-600" />
-                </div>
-              </div>
-              <h3 className="mt-4 text-lg font-medium text-gray-900">Content Optimization</h3>
-              <p className="mt-2 text-gray-600">
-                AI-powered content suggestions and optimization
-              </p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <motion.div className="bg-white rounded-xl shadow p-8 flex flex-col items-center" whileHover={{ scale: 1.04 }}>
+              <Brain className="h-10 w-10 text-blue-500 mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">AI-Powered Insights</h3>
+              <p className="text-gray-600 text-center">Get intelligent recommendations and predictions based on your data.</p>
+            </motion.div>
+            <motion.div className="bg-white rounded-xl shadow p-8 flex flex-col items-center" whileHover={{ scale: 1.04 }}>
+              <LineChart className="h-10 w-10 text-green-500 mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Real-time Analytics</h3>
+              <p className="text-gray-600 text-center">Monitor your social media performance in real-time.</p>
+            </motion.div>
+            <motion.div className="bg-white rounded-xl shadow p-8 flex flex-col items-center" whileHover={{ scale: 1.04 }}>
+              <Zap className="h-10 w-10 text-purple-500 mb-4" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Content Optimization</h3>
+              <p className="text-gray-600 text-center">AI-powered content suggestions and optimization.</p>
+            </motion.div>
           </div>
         </div>
       </div>
@@ -161,10 +120,9 @@ export function Home() {
       {favoriteDashboards.length > 0 && (
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="flex items-center mb-6">
-            <LinkStar className="w-5 h-5 text-yellow-500 mr-2" />
+            <Star className="w-5 h-5 text-yellow-500 mr-2" />
             <h2 className="text-2xl font-bold text-gray-900">Your Favorites</h2>
           </div>
-          
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {favoriteDashboards.map((tile) => (
               <DashboardTile key={tile.id} tile={tile} isFavorite={true} />
@@ -172,15 +130,14 @@ export function Home() {
           </div>
         </div>
       )}
-      
+
       {/* Recently Viewed Section - Only show if user has recently viewed dashboards */}
       {recentlyViewedDashboards.length > 0 && (
         <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
           <div className="flex items-center mb-6">
-            <LinkClock className="w-5 h-5 text-[#4076bb] mr-2" />
+            <Clock className="w-5 h-5 text-blue-500 mr-2" />
             <h2 className="text-2xl font-bold text-gray-900">Recently Viewed</h2>
           </div>
-          
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {recentlyViewedDashboards.slice(0, 3).map((tile) => (
               <DashboardTile 
@@ -196,7 +153,7 @@ export function Home() {
       {/* All Dashboards Section */}
       <div id="dashboards" className="py-24 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+          <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
               Powerful Analytics Dashboards
             </h2>
@@ -204,9 +161,10 @@ export function Home() {
               Get insights from all your social media platforms in one place
             </p>
           </div>
-
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Add your dashboard tiles here */}
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredDashboards.map((tile) => (
+              <DashboardTile key={tile.id} tile={tile} />
+            ))}
           </div>
         </div>
       </div>
