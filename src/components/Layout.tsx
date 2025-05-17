@@ -14,15 +14,15 @@ export function Layout({ children }: LayoutProps) {
             <div className="flex items-center">
               <Link to="/" className="flex-shrink-0 flex items-center">
                 <img 
-                  src="/enspec-logo.png" 
-                  alt="Enspec Power Logo"
+                  src="/logo.png" 
+                  alt="Social Sleuth Logo"
                   className="h-8 w-auto"
                   onError={(e) => {
                     // Fallback if logo image is missing
                     (e.target as HTMLImageElement).style.display = 'none';
                   }}
                 />
-                <span className="ml-2 text-xl font-bold text-gray-900">Analytics Dashboard</span>
+                <span className="ml-2 text-xl font-bold text-gray-900">Social Sleuth</span>
               </Link>
             </div>
             <nav className="flex space-x-4">
