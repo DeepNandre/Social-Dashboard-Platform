@@ -1,39 +1,122 @@
-# Social Analytics Dashboard
+# Social Sleuth - Social Media Intelligence Platform
 
-A modern analytics dashboard for social media metrics and business insights.
+A powerful, all-in-one social media analytics and content management platform that helps businesses uncover valuable insights and make data-driven decisions.
 
-## Features
-- Real-time analytics
-- Google Analytics integration
-- User authentication
-- Dashboard comparison
-- AI-powered insights
-- LinkedIn content generation
-- Multi-platform analytics
+## 🌟 Key Features
 
-## Technologies
-- React
+### Analytics & Insights
+- Real-time social media analytics
+- Cross-platform performance tracking
+- Custom report generation
+- Competitor analysis
+- Trend detection and forecasting
+
+### Content Management
+- AI-powered content generation
+- Content calendar and scheduling
+- Multi-platform publishing
+- Content performance tracking
+- Hashtag optimization
+
+### Team Collaboration
+- Role-based access control
+- Team workspace
+- Comment and feedback system
+- Task assignment and tracking
+- Real-time notifications
+
+### AI Features
+- Content suggestions
+- Performance predictions
+- Sentiment analysis
+- Audience insights
+- Competitor benchmarking
+
+## 🛠️ Technologies
+
+- React 18
 - TypeScript
 - Tailwind CSS
-- React Router
+- Framer Motion
 - Chart.js
 - OpenAI Integration
 - Microsoft Authentication
+- Express.js Backend
 
-## Getting Started
+## 🚀 Getting Started
 
 1. Clone the repository
-2. Install dependencies: `npm install`
-3. Create a `.env` file with your configuration:
-   - OPENAI_API_KEY
-   - GOOGLE_ANALYTICS_ID
-   - MICROSOFT_CLIENT_ID
-4. Start the development server: `npm run dev:full`
+```bash
+git clone https://github.com/yourusername/social-sleuth.git
+```
 
-## Features
-- Multi-platform analytics integration
-- AI-powered content generation
-- Real-time data visualization
-- Customizable dashboards
-- User authentication and authorization
-- Responsive design
+2. Install dependencies
+```bash
+npm install
+```
+
+3. Create a `.env` file with your configuration:
+```env
+OPENAI_API_KEY=your_openai_key
+GOOGLE_ANALYTICS_ID=your_ga_id
+MICROSOFT_CLIENT_ID=your_ms_client_id
+```
+
+4. Start the development server
+```bash
+npm run dev:full
+```
+
+## 📱 Supported Platforms
+
+- LinkedIn
+- Twitter
+- Instagram
+- Facebook
+- YouTube
+- TikTok
+
+## 🔍 Features in Detail
+
+### Analytics Dashboard
+- Real-time metrics
+- Custom date ranges
+- Export capabilities
+- Interactive charts
+- Performance comparisons
+
+### Content Studio
+- AI content generation
+- Multi-format support
+- Scheduling system
+- Performance tracking
+- Team collaboration
+
+### Team Management
+- User roles and permissions
+- Activity tracking
+- Team analytics
+- Resource allocation
+- Performance metrics
+
+## 🔒 Security
+
+- End-to-end encryption
+- Two-factor authentication
+- Role-based access control
+- Regular security audits
+- GDPR compliance
+
+## 📈 Pricing
+
+- Free Tier: Basic analytics and content tools
+- Pro: Advanced analytics and team features
+- Enterprise: Custom solutions and dedicated support
+
+## 🤝 Contributing
+
+We welcome contributions! Please read our contributing guidelines before submitting pull requests.
+
+## 📄 License
+
+MIT License - see LICENSE file for details

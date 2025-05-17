@@ -1,131 +1,129 @@
-import React, { useState, useContext } from 'react';
-import { ArrowLeft, Menu, X, User } from 'lucide-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { NotificationCenter } from './NotificationCenter';
-import { useUser } from '../context/UserContext';
-import { UserContext } from '../context/UserContext';
+import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { 
+  Menu, 
+  X, 
+  User, 
+  Bell, 
+  Settings,
+  LogOut
+} from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export function Navigation() {
+  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
-  const isHome = location.pathname === '/';
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { user, setUser } = useContext(UserContext);
-
-  const handleLogout = () => {
-    // Simple logout without MSAL
-    localStorage.removeItem('user');
-    setUser(null);
-    navigate('/login');
-  };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm z-50">
+    <nav className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between h-16">
           <div className="flex items-center">
-            {!isHome && (
-              <Link
-                to="/"
-                className="mr-4 p-2 rounded-full hover:bg-gray-100 transition-all duration-300"
-                aria-label="Back to home"
-              >
-                <ArrowLeft className="w-5 h-5 text-[#4076bb]" />
-              </Link>
-            )}
-            <Link to="/" className="flex items-center space-x-3">
+            <Link to="/" className="flex items-center">
               <img 
-                src="/enspec-logo.png" 
-                alt="Enspec Power Logo" 
-                className="h-12 w-auto" 
+                src="/logo.png" 
+                alt="MetricFlow Logo" 
+                className="h-8 w-auto"
               />
-              <div className="hidden md:block h-6 w-px bg-gray-200"></div>
-              <span className="hidden md:block text-sm font-medium text-gray-600">Analytics Dashboard</span>
+              <span className="ml-2 text-xl font-bold text-gray-900">
+                MetricFlow
+              </span>
             </Link>
           </div>
-          
-          {user && (
-            <div className="hidden md:flex items-center space-x-4">
-              <Link to="/" className={`px-3 py-2 text-sm font-medium rounded-md transition-colors ${isHome ? 'text-[#4076bb] bg-blue-50' : 'text-gray-600 hover:text-[#4076bb] hover:bg-gray-50'}`}>
-                Home
-              </Link>
-              <a href="https://www.enspecpower.com" target="_blank" rel="noopener noreferrer" className="px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-[#4076bb] hover:bg-gray-50 transition-colors">
-                Main Website
-              </a>
-              
-              {/* Notification Center */}
-              <NotificationCenter />
-              
-              {/* User menu */}
-              <div className="relative ml-3">
-                <div>
-                  <button
-                    type="button"
-                    className="flex items-center max-w-xs text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4076bb]"
-                    id="user-menu-button"
-                    aria-expanded="false"
-                    aria-haspopup="true"
-                    onClick={() => navigate('/profile')}
-                  >
-                    <span className="sr-only">Open user menu</span>
-                    <div className="h-8 w-8 rounded-full bg-[#4076bb] text-white flex items-center justify-center">
-                      <User className="h-4 w-4" />
-                    </div>
-                  </button>
-                </div>
-              </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-4">
+            <Link 
+              to="/dashboard" 
+              className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+            >
+              Dashboard
+            </Link>
+            <Link 
+              to="/analytics" 
+              className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+            >
+              Analytics
+            </Link>
+            <Link 
+              to="/content" 
+              className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+            >
+              Content
+            </Link>
+            <Link 
+              to="/team" 
+              className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+            >
+              Team
+            </Link>
+
+            <div className="relative ml-3">
+              <button
+                type="button"
+                className="flex items-center max-w-xs text-sm bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                <span className="sr-only">Open user menu</span>
+                <User className="h-8 w-8 text-gray-400" />
+              </button>
             </div>
-          )}
-          
-          <button 
-            className="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? (
-              <X className="w-5 h-5 text-[#4076bb]" />
-            ) : (
-              <Menu className="w-5 h-5 text-[#4076bb]" />
-            )}
-          </button>
-        </div>
-      </div>
-      
-      {/* Mobile menu */}
-      {mobileMenuOpen && user && (
-        <div className="md:hidden bg-white border-b border-gray-100 shadow-lg">
-          <div className="px-2 pt-2 pb-3 space-y-1">
-            <Link 
-              to="/" 
-              className={`block px-3 py-2 rounded-md text-base font-medium ${isHome ? 'text-[#4076bb] bg-blue-50' : 'text-gray-600 hover:text-[#4076bb] hover:bg-gray-50'}`}
-              onClick={() => setMobileMenuOpen(false)}
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
             >
-              Home
-            </Link>
-            <Link 
-              to="/profile" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#4076bb] hover:bg-gray-50"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Profile
-            </Link>
-            <a 
-              href="https://www.enspecpower.com" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:text-[#4076bb] hover:bg-gray-50"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Main Website
-            </a>
-            <button 
-              onClick={handleLogout}
-              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:text-red-800 hover:bg-red-50"
-            >
-              Sign out
+              <span className="sr-only">Open main menu</span>
+              {isOpen ? (
+                <X className="block h-6 w-6" />
+              ) : (
+                <Menu className="block h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
-      )}
+      </div>
+
+      {/* Mobile menu */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden"
+          >
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              <Link
+                to="/dashboard"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+              >
+                Dashboard
+              </Link>
+              <Link
+                to="/analytics"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+              >
+                Analytics
+              </Link>
+              <Link
+                to="/content"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+              >
+                Content
+              </Link>
+              <Link
+                to="/team"
+                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+              >
+                Team
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

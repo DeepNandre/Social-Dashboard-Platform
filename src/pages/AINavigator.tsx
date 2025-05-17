@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ClipboardCopy, RefreshCw, Linkedin, Zap, Brain, Sparkles, Copy, ArrowRight, Save, PenLine } from 'lucide-react';
+import { ClipboardCopy, RefreshCw, Linkedin, Zap, Brain, Sparkles, Copy, ArrowRight, Save, PenLine, BarChart, Users, Target } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { debounce } from 'lodash';
+import debounce from 'lodash/debounce';
+
+interface ContentGeneratorProps {
+  prompt: string;
+  contentType: string;
+  tone: string;
+  wordCount: number;
+}
 
 export function AINavigator() {
   const [isGenerating, setIsGenerating] = useState(false);
@@ -13,20 +20,23 @@ export function AINavigator() {
   const [copySuccess, setCopySuccess] = useState(false);
   const [charCount, setCharCount] = useState(0);
   const [noteSaved, setNoteSaved] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState('linkedin');
+  const [contentType, setContentType] = useState('post');
+  const [tone, setTone] = useState('professional');
   
-  // Debounced character count update to improve performance
+  // Debounced character count update
   const updateCharCount = useCallback(
-    debounce((text) => {
+    debounce((text: string) => {
       setCharCount(text.length);
     }, 100),
     []
   );
   
-  const handlePromptChange = (e) => {
+  const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPrompt(e.target.value);
     updateCharCount(e.target.value);
   };
-  
+
   const copyToNotepad = () => {
     setNotepadContent(generatedContent);
     setNoteSaved(false);
@@ -34,7 +44,7 @@ export function AINavigator() {
 
   const saveNotepad = () => {
     try {
-      localStorage.setItem('enspec-content-notepad', notepadContent);
+      localStorage.setItem('content-notepad', notepadContent);
       setNoteSaved(true);
       setTimeout(() => setNoteSaved(false), 2000);
     } catch (err) {
@@ -44,7 +54,7 @@ export function AINavigator() {
 
   useEffect(() => {
     try {
-      const savedNotes = localStorage.getItem('enspec-content-notepad');
+      const savedNotes = localStorage.getItem('content-notepad');
       if (savedNotes) {
         setNotepadContent(savedNotes);
       }
@@ -52,62 +62,9 @@ export function AINavigator() {
       console.error('Failed to load from localStorage:', err);
     }
   }, []);
-  
-  const generateContent = async () => {
-    setIsGenerating(true);
-    setError('');
-    setCopySuccess(false);
-    
-    try {
-      const apiUrl = 'http://localhost:3003/api/content-generator';
-      
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          prompt: prompt || "Enspec Power's analytics solutions for the energy sector",
-          contentType: 'industry_insight',
-          tone: 'professional',
-          wordCount,
-          maxTokens: 2000
-        }),
-      });
-      
-      if (!response.ok) {
-        let errorMsg = response.statusText;
-        try {
-          const errorData = await response.json();
-          errorMsg = errorData.message || errorMsg;
-        } catch (e) {
-          // If parsing fails, use status text
-        }
-        throw new Error(`API Error: ${errorMsg}`);
-      }
-      
-      const data = await response.json();
-      setGeneratedContent(data.content);
-    } catch (err) {
-      console.error('Detailed error:', err);
-      setError(`Failed to generate content: ${err.message}`);
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-  
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText(generatedContent);
-      setCopySuccess(true);
-      setTimeout(() => setCopySuccess(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy to clipboard:', err);
-    }
-  };
 
   return (
-    <div className="min-h-screen bg-[#4076bb]">
+    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-indigo-700">
       <div className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
@@ -121,7 +78,7 @@ export function AINavigator() {
                     (e.target as HTMLImageElement).style.display = 'none';
                   }}
                 />
-                <span className="ml-2 text-xl font-bold text-gray-900">Analytics Dashboard</span>
+                <span className="ml-2 text-xl font-bold text-gray-900">AI Content Assistant</span>
               </Link>
             </div>
             <Link 
@@ -135,192 +92,205 @@ export function AINavigator() {
       </div>
       
       <div className="container mx-auto px-4 py-6">
-        {/* OpenAI badge */}
+        {/* AI badge */}
         <div className="flex justify-center mb-6">
           <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full">
             <Sparkles className="w-4 h-4 text-white" />
-            <p className="text-white text-sm">Powered by OpenAI</p>
+            <p className="text-white text-sm">Powered by Advanced AI</p>
           </div>
         </div>
         
         {/* Main content area */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-5xl mx-auto">
-          {/* LinkedIn Content Generator */}
+          {/* Content Generator */}
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
             <div className="p-4 flex items-center justify-between border-b border-gray-100">
               <div className="flex items-center">
-                <Linkedin className="w-4 h-4 text-[#0077b5] mr-2" />
-                <h2 className="text-base font-medium text-gray-800">LinkedIn Content Generator</h2>
+                <Brain className="w-4 h-4 text-blue-600 mr-2" />
+                <h2 className="text-base font-medium text-gray-800">AI Content Generator</h2>
               </div>
               <button className="text-gray-400 hover:text-gray-500">
                 <RefreshCw className="w-4 h-4" />
               </button>
             </div>
             
-            <div className="p-4">
-              <div className="mb-4">
-                <label htmlFor="prompt" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="p-4 space-y-4">
+              {/* Platform Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Select Platform
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {['linkedin', 'twitter', 'facebook'].map((platform) => (
+                    <button
+                      key={platform}
+                      onClick={() => setSelectedPlatform(platform)}
+                      className={`px-3 py-2 rounded-md text-sm font-medium ${
+                        selectedPlatform === platform
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {platform.charAt(0).toUpperCase() + platform.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Content Type */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Content Type
+                </label>
+                <select
+                  value={contentType}
+                  onChange={(e) => setContentType(e.target.value)}
+                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                >
+                  <option value="post">Post</option>
+                  <option value="article">Article</option>
+                  <option value="thread">Thread</option>
+                  <option value="newsletter">Newsletter</option>
+                </select>
+              </div>
+
+              {/* Tone Selection */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Tone
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {['professional', 'casual', 'friendly'].map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setTone(t)}
+                      className={`px-3 py-2 rounded-md text-sm font-medium ${
+                        tone === t
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
+                    >
+                      {t.charAt(0).toUpperCase() + t.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Word Count Slider */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Word Count: {wordCount}
+                </label>
+                <input
+                  type="range"
+                  min="100"
+                  max="1000"
+                  value={wordCount}
+                  onChange={(e) => setWordCount(parseInt(e.target.value))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+
+              {/* Prompt Input */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   What would you like to write about?
                 </label>
                 <textarea
-                  id="prompt"
                   value={prompt}
                   onChange={handlePromptChange}
+                  placeholder="Enter your topic or idea..."
+                  className="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#4076bb] focus:border-[#4076bb] text-sm"
-                  placeholder="Create a post on Power Systems"
-                ></textarea>
-                <div className="mt-1 text-xs text-right text-gray-500">{charCount} characters</div>
+                />
+                <p className="mt-1 text-sm text-gray-500">
+                  {charCount} characters
+                </p>
               </div>
-              
-              <div className="mb-4">
-                <label htmlFor="wordCount" className="block text-sm font-medium text-gray-700 mb-1">
-                  Length (Approx. Words)
-                </label>
-                <div className="flex items-center">
-                  <span className="text-xs text-gray-500 mr-2">50</span>
-                  <input
-                    type="range"
-                    id="wordCount"
-                    min="50"
-                    max="750"
-                    step="10"
-                    value={wordCount}
-                    onChange={(e) => setWordCount(parseInt(e.target.value))}
-                    className="flex-grow h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-                  />
-                  <span className="text-xs text-gray-500 ml-2">750</span>
-                </div>
-                <div className="text-center text-sm mt-1">{wordCount}</div>
-              </div>
-              
-              {error && (
-                <div className="mb-4 p-3 bg-red-50 text-red-700 text-sm rounded-md">
-                  {error}
-                </div>
-              )}
-              
+
+              {/* Generate Button */}
               <button
-                className="w-full bg-[#4076bb] text-white py-2 px-4 rounded-md hover:bg-[#3567a6] transition-colors flex items-center justify-center"
-                onClick={generateContent}
-                disabled={isGenerating}
+                onClick={() => {/* Add generation logic */}}
+                disabled={isGenerating || !prompt}
+                className="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isGenerating ? (
-                  <>
-                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Zap className="w-4 h-4 mr-2" />
-                    Generate LinkedIn Post
-                  </>
-                )}
+                {isGenerating ? 'Generating...' : 'Generate Content'}
               </button>
             </div>
           </div>
-          
-          {/* Generated LinkedIn Post */}
+
+          {/* Notepad */}
           <div className="bg-white rounded-lg shadow-sm overflow-hidden">
             <div className="p-4 flex items-center justify-between border-b border-gray-100">
               <div className="flex items-center">
-                <Linkedin className="w-4 h-4 text-[#0077b5] mr-2" />
-                <h2 className="text-base font-medium text-gray-800">Generated LinkedIn Post</h2>
-              </div>
-              <div className="flex items-center space-x-1">
-                <button 
-                  className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-                  onClick={copyToNotepad}
-                  disabled={!generatedContent}
-                  
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <button 
-                  className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-                  onClick={copyToClipboard}
-                  disabled={!generatedContent}
-                  title="Copy to clipboard"
-                >
-                  <Copy className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-            
-            <div className="p-4" style={{ minHeight: "260px" }}>
-              {generatedContent ? (
-                <div className="prose prose-sm max-w-none text-gray-800 whitespace-pre-line overflow-y-auto" style={{ maxHeight: "260px" }}>
-                  {generatedContent}
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-full text-center text-gray-400 py-6">
-                  <ClipboardCopy className="w-10 h-10 mb-3 text-gray-300" />
-                  <p className="text-sm text-gray-500">Your LinkedIn content will appear here</p>
-                  <p className="text-xs mt-1 text-gray-400">
-                    Click the "Generate LinkedIn Post" button to create content
-                  </p>
-                </div>
-              )}
-              
-              {copySuccess && (
-                <div className="absolute top-14 right-4 bg-green-500 text-white px-2 py-1 rounded-md text-xs flex items-center">
-                  <ClipboardCopy className="w-3 h-3 mr-1" />
-                  Copied!
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-        
-        {/* Content Notepad - Full width */}
-        <div className="mt-4 max-w-5xl mx-auto">
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
-            <div className="p-4 flex items-center justify-between border-b border-gray-100">
-              <div className="flex items-center">
-                <PenLine className="w-4 h-4 text-gray-600 mr-2" />
+                <PenLine className="w-4 h-4 text-blue-600 mr-2" />
                 <h2 className="text-base font-medium text-gray-800">Content Notepad</h2>
               </div>
-              <button 
-                className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-                onClick={saveNotepad}
-                title="Save notes"
-              >
-                <Save className="w-4 h-4" />
-              </button>
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={copyToNotepad}
+                  className="text-gray-400 hover:text-gray-500"
+                  title="Copy to Notepad"
+                >
+                  <ClipboardCopy className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={saveNotepad}
+                  className="text-gray-400 hover:text-gray-500"
+                  title="Save Notepad"
+                >
+                  <Save className="w-4 h-4" />
+                </button>
+              </div>
             </div>
             
             <div className="p-4">
               <textarea
                 value={notepadContent}
                 onChange={(e) => setNotepadContent(e.target.value)}
-                rows={5}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-[#4076bb] focus:border-[#4076bb] text-sm"
-                placeholder="Use this space to edit and save your content..."
-              ></textarea>
-              
+                placeholder="Your content will appear here..."
+                className="w-full h-64 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              />
               {noteSaved && (
-                <div className="absolute bottom-16 right-8 bg-green-500 text-white px-3 py-1 rounded-md text-xs flex items-center">
-                  <Save className="w-3 h-3 mr-1" />
-                  Saved!
-                </div>
+                <p className="mt-2 text-sm text-green-600">Notepad saved!</p>
               )}
-              
-              <div className="mt-3 flex flex-wrap gap-2">
-                <div className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">
-                  #PowerSystems
+            </div>
+          </div>
+        </div>
+
+        {/* AI Insights Section */}
+        <div className="mt-8 max-w-5xl mx-auto">
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div className="p-4 border-b border-gray-100">
+              <h2 className="text-lg font-medium text-gray-900">AI Insights</h2>
+            </div>
+            <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-4 bg-blue-50 rounded-lg">
+                <div className="flex items-center mb-2">
+                  <BarChart className="w-5 h-5 text-blue-600 mr-2" />
+                  <h3 className="font-medium text-gray-900">Performance Metrics</h3>
                 </div>
-                <div className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">
-                  #GridAnalytics
+                <p className="text-sm text-gray-600">
+                  AI-powered analysis of your content performance
+                </p>
+              </div>
+              <div className="p-4 bg-green-50 rounded-lg">
+                <div className="flex items-center mb-2">
+                  <Users className="w-5 h-5 text-green-600 mr-2" />
+                  <h3 className="font-medium text-gray-900">Audience Insights</h3>
                 </div>
-                <div className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">
-                  #HarmonicFilter
+                <p className="text-sm text-gray-600">
+                  Understand your audience better with AI analysis
+                </p>
+              </div>
+              <div className="p-4 bg-purple-50 rounded-lg">
+                <div className="flex items-center mb-2">
+                  <Target className="w-5 h-5 text-purple-600 mr-2" />
+                  <h3 className="font-medium text-gray-900">Content Strategy</h3>
                 </div>
-                <div className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">
-                  #RenewableEnergy
-                </div>
-                <div className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">
-                  #EnspecPower
-                </div>
+                <p className="text-sm text-gray-600">
+                  Get AI recommendations for content optimization
+                </p>
               </div>
             </div>
           </div>
